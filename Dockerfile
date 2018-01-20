@@ -50,9 +50,7 @@ RUN apt-get install -y xfce4-taskmanager gtk3-engines-xfce
 
 # clean up
 RUN rm -rf /var/lib/apt/lists/*
-#RUN echo "deb http://httpredir.debian.org/debian/ stretch main contrib non-free" >> /etc/apt/sources.list
 RUN apt-get update
-#RUN apt-get install -y linux-headers-amd64 nvidia-driver
 RUN apt-get install -y         initramfs-tools \
     libcairo2 \
     libfreetype6 \
@@ -69,14 +67,19 @@ RUN apt-get install -y         initramfs-tools \
     libasound2  \
     alsa-utils \
     alsa-oss \
-    chromium
+    software-properties-common \
+    gnupg
+RUN echo "deb http://ppa.launchpad.net/graphics-drivers/ppa/ubuntu trusty main" >> /etc/apt/sources.list
+RUN echo "deb-src http://ppa.launchpad.net/graphics-drivers/ppa/ubuntu trusty main" >> /etc/apt/sources.list
+RUN apt-get update
+RUN apt-get install -y --allow-unauthenticated nvidia-387
 RUN wget --no-check-certificate https://s3.amazonaws.com/parsec-build/package/parsec-linux.deb
-RUN wget --no-check-certificat http://us.download.nvidia.com/XFree86/Linux-x86_64/387.34/NVIDIA-Linux-x86_64-387.34.run
-RUN chmod +x NVIDIA-Linux-x86_64-387.34.run
-RUN modprobe -r nvidia-drm
-RUN ./NVIDIA-Linux-x86_64-387.34.run -s
+#RUN wget --no-check-certificat http://us.download.nvidia.com/XFree86/Linux-x86_64/387.34/NVIDIA-Linux-x86_64-387.34.run
+#RUN chmod +x NVIDIA-Linux-x86_64-387.34.run
+#RUN modprobe -r nvidia-drm
+#RUN ./NVIDIA-Linux-x86_64-387.34.run -x
 RUN dpkg -i parsec-linux.deb
-
+RUN apt-get install -y pulseaudio
 
 # create startscript 
 RUN echo '#! /bin/bash\n\
