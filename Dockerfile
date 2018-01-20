@@ -50,6 +50,33 @@ RUN apt-get install -y xfce4-taskmanager gtk3-engines-xfce
 
 # clean up
 RUN rm -rf /var/lib/apt/lists/*
+#RUN echo "deb http://httpredir.debian.org/debian/ stretch main contrib non-free" >> /etc/apt/sources.list
+RUN apt-get update
+#RUN apt-get install -y linux-headers-amd64 nvidia-driver
+RUN apt-get install -y         initramfs-tools \
+    libcairo2 \
+    libfreetype6 \
+    libgdk-pixbuf2.0-0 \
+    libgl1-mesa-glx \
+    libgl1 \
+    libglib2.0-0 \
+    libgtk2.0-0 \
+    libpango-1.0-0 \
+    libpangocairo-1.0-0 \
+    libsm6 \
+    libsndio6.1 \
+    wget \
+    libasound2  \
+    alsa-utils \
+    alsa-oss \
+    chromium
+RUN wget --no-check-certificate https://s3.amazonaws.com/parsec-build/package/parsec-linux.deb
+RUN wget --no-check-certificat http://us.download.nvidia.com/XFree86/Linux-x86_64/387.34/NVIDIA-Linux-x86_64-387.34.run
+RUN chmod +x NVIDIA-Linux-x86_64-387.34.run
+RUN modprobe -r nvidia-drm
+RUN ./NVIDIA-Linux-x86_64-387.34.run -s
+RUN dpkg -i parsec-linux.deb
+
 
 # create startscript 
 RUN echo '#! /bin/bash\n\
